@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('currencies', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 3)->unique(); // contoh: USD, IDR
+            $table->string('code')->unique(); // contoh: USD, IDR
+            $table->string('name');
             $table->float('rate_to_base')->default(1);
             $table->timestamp('fetched_at')->nullable();
         });
