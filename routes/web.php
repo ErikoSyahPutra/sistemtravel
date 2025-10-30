@@ -5,6 +5,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DestinationController;
+use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\TourPackageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -36,6 +39,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class);
     Route::resource('guides', GuideController::class);
+    Route::resource('destinations', DestinationController::class);
+    Route::resource('currencies', CurrencyController::class);
+    Route::resource('tourpackages', TourPackageController::class);
 });
 
 // =============== GUIDE ROUTE ===============

@@ -10,9 +10,21 @@ use Illuminate\Http\Request;
 class GuideController extends Controller
 {
     // Tampilkan semua guide
-    public function index()
+    public function index(Request $request)
     {
-        $guides = Guide::with('user')->paginate(10);
+        $search = $request->input('search');
+
+        $guides = Guide::with('user')
+            ->when($search, function ($query, $search) {
+                $query->whereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                })
+                    ->orWhere('languages', 'like', "%{$search}%");
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(10);
+
         return view('admin.guides.index', compact('guides'));
     }
 

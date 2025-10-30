@@ -13,7 +13,11 @@ class Currency extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'rate_to_base', 'fetched_at'];
+    protected $fillable = ['code', 'name', 'rate_to_base', 'fetched_at'];
+
+    protected $casts = [
+        'fetched_at' => 'datetime',
+    ];
 
     public $timestamps = false;
 }

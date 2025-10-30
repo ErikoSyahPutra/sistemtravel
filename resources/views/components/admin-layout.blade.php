@@ -10,7 +10,7 @@
 
 <body class="bg-gray-100 flex min-h-screen">
     <!-- Sidebar -->
-    <aside class="w-64 bg-gray-900 text-white flex flex-col">
+    <aside class="fixed top-0 left-0 h-screen w-64 bg-gray-900 text-white flex flex-col">
         <div class="p-4 text-2xl font-bold border-b border-gray-800">
             Sistem Travel
         </div>
@@ -27,6 +27,18 @@
                 class="block px-3 py-2 rounded hover:bg-gray-800 {{ request()->routeIs('admin.guides.*') ? 'bg-gray-800' : '' }}">
                 Management Guide
             </a>
+            <a href="{{ route('admin.destinations.index') }}"
+                class="block px-3 py-2 rounded hover:bg-gray-800 {{ request()->routeIs('admin.destinations.*') ? 'bg-gray-800' : '' }}">
+                Management Destination
+            </a>
+            <a href="{{ route('admin.currencies.index') }}"
+                class="block px-3 py-2 rounded hover:bg-gray-800 {{ request()->routeIs('admin.currencies.*') ? 'bg-gray-800' : '' }}">
+                Currency Management
+            </a>
+            <a href="{{ route('admin.tourpackages.index') }}"
+                class="block px-3 py-2 rounded hover:bg-gray-800 {{ request()->routeIs('admin.tourpackages.*') ? 'bg-gray-800' : '' }}">
+                Tour Package Management
+            </a>
         </nav>
         <div class="p-4 border-t border-gray-800">
             <form method="POST" action="{{ route('logout') }}">
@@ -39,9 +51,9 @@
     </aside>
 
     <!-- Main Content -->
-    <div class="flex-1 flex flex-col">
+    <div class="flex-1 flex flex-col ml-64">
         <!-- Topbar -->
-        <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
+        <header class="fixed top-0 left-0 w-screen ml-64 bg-white shadow px-6 py-4 flex justify-between items-center">
             <h1 class="text-xl font-semibold">{{ $title ?? 'Dashboard' }}</h1>
             <div class="flex items-center space-x-3">
                 <span class="text-gray-600">{{ auth()->user()->name }}</span>
@@ -57,7 +69,7 @@
         </header>
 
         <!-- Page Content -->
-        <main class="flex-1 p-6">
+        <main class="flex-1 p-6 mt-16">
             {{ $slot }}
         </main>
     </div>

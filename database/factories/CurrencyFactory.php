@@ -11,12 +11,21 @@ class CurrencyFactory extends Factory
 
     public function definition()
     {
-        $codes = ['IDR', 'USD', 'EUR', 'JPY', 'SGD'];
+        $currencies = [
+            'IDR' => 'Indonesian Rupiah',
+            'USD' => 'US Dollar',
+            'EUR' => 'Euro',
+            'JPY' => 'Japanese Yen',
+            'SGD' => 'Singapore Dollar',
+        ];
+
+        $code = $this->faker->unique()->randomElement(array_keys($currencies));
 
         return [
-            'code' => $this->faker->unique()->randomElement($codes),
+            'code' => $code,
+            'name' => $currencies[$code],
             'rate_to_base' => $this->faker->randomFloat(4, 0.0001, 15000),
-            'fetched_at' => Carbon::now()->subDays(rand(0, 30)),
+            'fetched_at' => now()->subDays(rand(0, 30)),
         ];
     }
 }
