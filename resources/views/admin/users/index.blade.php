@@ -2,10 +2,27 @@
     <x-slot name="title">Data User</x-slot>
 
     <div class="py-6">
-        <div class="flex justify-end">
+        <div class="flex items-center justify-between mb-4 gap-4">
+            {{-- Search Form --}}
+            <form method="GET" action="{{ route('admin.users.index') }}" class="flex items-center w-full max-w-md gap-2">
+                <input type="text" name="search" value="{{ request('search') }}"
+                    placeholder="Cari berdasarkan nama, email, nomor, atau role..."
+                    class="border-gray-300 rounded-md w-full px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                <button type="submit"
+                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Cari</button>
+                @if (request('search'))
+                    <a href="{{ route('admin.users.index') }}"
+                        class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition">Reset</a>
+                @endif
+            </form>
+
+            {{-- Tombol Tambah --}}
             <button onclick="window.location='{{ route('admin.users.create') }}'"
-                class="bg-blue-600 text-white px-4 py-2 rounded mb-4 hover:bg-blue-700">Tambah User</button>
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 whitespace-nowrap">
+                Tambah User
+            </button>
         </div>
+
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
             <table class="min-w-full text-sm text-gray-600">
                 <thead class="border-b bg-gray-100">
