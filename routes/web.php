@@ -55,6 +55,27 @@ Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer
     Route::get('/dashboard', [CustomerController::class, 'index'])->name('dashboard');
     Route::get('/destinations', [CustomerController::class, 'destinations'])->name('destinations');
     Route::get('/booking', [BookingController::class, 'index'])->name('booking');
+
+    // Rute baru untuk menampilkan paket tur dari satu destinasi
+    Route::get('/destinations/{destination}/packages', [CustomerController::class, 'showPackages'])
+         ->name('packages.index');
+
+    // Rute baru untuk menampilkan form booking
+    Route::get('/packages/{tourPackage}/book', [BookingController::class, 'create'])
+         ->name('booking.create');
+
+    // Rute baru untuk menyimpan data booking
+    Route::post('/booking/store', [BookingController::class, 'store'])
+         ->name('booking.store');
+
+    // Rute baru untuk halaman pembayaran
+    // (Ini juga akan memperbaiki link 'Bayar Sekarang' di halaman booking list)
+    Route::get('/booking/{booking}/pay', [BookingController::class, 'showPayment'])
+         ->name('booking.pay');
+
+    // Rute POST untuk memproses pembayaran (simulasi)
+    Route::post('/booking/{booking}/pay', [BookingController::class, 'processPayment'])
+         ->name('booking.process');
 });
 
 require __DIR__ . '/auth.php';

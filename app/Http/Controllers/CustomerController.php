@@ -31,4 +31,13 @@ class CustomerController extends Controller
 
         return view('customer.destinations', compact('destinations'));
     }
+
+    // Method baru untuk menampilkan paket tur berdasarkan destinasi
+    public function showPackages(Destination $destination)
+    {
+        // Load paket tur yang terkait dengan destinasi ini
+        $destination->load('tourPackages');
+
+        return view('customer.packages', compact('destination'));
+    }
 }

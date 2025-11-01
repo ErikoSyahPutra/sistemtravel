@@ -66,7 +66,7 @@
 
                                 <!-- Lihat Paket Button -->
                                 <div class="mt-4">
-                                    <a href="{{ route('customer.destinations', $destination->id) }}"
+                                    <a href="{{ route('customer.packages.index', $destination) }}"
                                        class="block w-full text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-semibold">
                                         Lihat Paket →
                                     </a>
