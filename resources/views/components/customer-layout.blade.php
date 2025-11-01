@@ -16,12 +16,13 @@
     <header class="bg-white shadow sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <a href="/" class="text-2xl font-bold text-blue-600">KitaTravel</a>
-            <nav class="space-x-6 hidden md:flex">
-                <a href="#" class="hover:text-blue-600">Beranda</a>
-                <a href="#" class="hover:text-blue-600">Destinasi</a>
-                <a href="#" class="hover:text-blue-600">Panduan</a>
-                <a href="#" class="hover:text-blue-600">Kontak</a>
-            </nav>
+        <nav class="space-x-6 hidden md:flex">
+            <a href="{{ route('customer.dashboard') }}" class="hover:text-blue-600">Beranda</a>
+            <a href="{{ route('customer.destinations') }}" class="hover:text-blue-600">Destinasi</a>
+            <a href="{{ route('customer.booking') }}" class="hover:text-blue-600">Booking Saya</a>
+            <a href="#" class="hover:text-blue-600">Panduan</a>
+            <a href="#" class="hover:text-blue-600">Kontak</a>
+        </nav>
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">

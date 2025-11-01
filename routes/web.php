@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\TourPackageController;
+use App\Http\Controllers\BookingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -52,6 +53,8 @@ Route::middleware(['auth', 'role:guide'])->prefix('guide')->name('guide.')->grou
 // =============== CUSTOMER ROUTE ===============
 Route::middleware(['auth', 'role:customer'])->prefix('customer')->name('customer.')->group(function () {
     Route::get('/dashboard', [CustomerController::class, 'index'])->name('dashboard');
+    Route::get('/destinations', [CustomerController::class, 'destinations'])->name('destinations');
+    Route::get('/booking', [BookingController::class, 'index'])->name('booking');
 });
 
 require __DIR__ . '/auth.php';
