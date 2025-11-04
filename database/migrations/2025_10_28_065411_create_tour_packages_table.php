@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description');
-            $table->bigInteger('price_minor'); // harga dalam satuan kecil (mis. sen)
+            $table->bigInteger('price'); // harga dalam satuan kecil (mis. sen)
             $table->string('currency', 3);
             $table->integer('duration_days');
             $table->integer('capacity');

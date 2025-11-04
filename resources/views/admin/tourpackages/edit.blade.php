@@ -20,8 +20,7 @@
 
             <div>
                 <label class="block font-medium text-gray-700">Harga</label>
-                <input type="number" name="price_minor" min="0"
-                    value="{{ old('price_minor', $tourpackage->price_minor) }}"
+                <input type="number" name="price" min="0" value="{{ old('price', $tourpackage->price) }}"
                     class="w-full border-gray-300 rounded-md" required>
             </div>
 
