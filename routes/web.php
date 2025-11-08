@@ -8,6 +8,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\TourPackageController;
+use App\Http\Controllers\Guide\DashboardController as GuideDashboardController;
+use App\Http\Controllers\Guide\JobController;
+use App\Http\Controllers\Guide\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -46,7 +49,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
 // =============== GUIDE ROUTE ===============
 Route::middleware(['auth', 'role:guide'])->prefix('guide')->name('guide.')->group(function () {
-    Route::get('/dashboard', [GuideController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [GuideDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/my-jobs', [JobController::class, 'index'])->name('my-jobs.index');
+    Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 });
 
 // =============== CUSTOMER ROUTE ===============

@@ -58,12 +58,12 @@
             <div class="flex items-center space-x-3">
                 <span class="text-gray-600">{{ auth()->user()->name }}</span>
                 @if (auth()->user()->profile_photo)
-                    <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" alt="Profile"
-                        class="w-8 h-8 rounded-full border border-gray-300">
+                <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" alt="Profile"
+                    class="w-8 h-8 rounded-full border border-gray-300">
                 @else
-                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-700">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                    </div>
+                <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-700">
+                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                </div>
                 @endif
             </div>
         </header>
