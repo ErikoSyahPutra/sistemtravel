@@ -17,8 +17,9 @@
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <a href="/" class="text-2xl font-bold text-blue-600">KitaTravel</a>
             <nav class="space-x-6 hidden md:flex">
-                <a href="#" class="hover:text-blue-600">Beranda</a>
-                <a href="#" class="hover:text-blue-600">Destinasi</a>
+                <a href="{{ route('customer.dashboard') }}" class="hover:text-blue-600">Beranda</a>
+                <a href="{{ route('customer.destinations') }}" class="hover:text-blue-600">Destinasi</a>
+                <a href="{{ route('customer.booking') }}" class="hover:text-blue-600">Booking Saya</a>
                 <a href="#" class="hover:text-blue-600">Panduan</a>
                 <a href="#" class="hover:text-blue-600">Kontak</a>
             </nav>
@@ -68,7 +69,7 @@
     </main>
 
     {{-- Footer --}}
-    <footer class="bg-white border-t mt-16 py-8 text-center text-sm text-gray-600">
+    <footer class="bg-white border-t mt-4 py-8 text-center text-sm text-gray-600">
         &copy; {{ date('Y') }} KitaTravel. Semua hak dilindungi.
     </footer>
 

@@ -13,7 +13,7 @@ class TourPackage extends Model
         'title',
         'slug',
         'description',
-        'price_minor',
+        'price',
         'currency',
         'duration_days',
         'capacity',
@@ -39,5 +39,10 @@ class TourPackage extends Model
     public function currencyRef()
     {
         return $this->belongsTo(Currency::class, 'currency', 'code');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'package_id');
     }
 }

@@ -52,7 +52,7 @@
                             <td class="px-4 py-2">{{ $package->title }}</td>
                             <td class="px-4 py-2">{{ $package->destination->name ?? '-' }}</td>
                             <td class="px-4 py-2">
-                                {{ strtoupper($package->currency) }} {{ number_format($package->price_minor, 2) }}
+                                {{ strtoupper($package->currency) }} {{ number_format($package->price, 2) }}
                             </td>
                             <td class="px-4 py-2">{{ $package->duration_days }} hari</td>
                             <td class="px-4 py-2">{{ $package->capacity }}</td>

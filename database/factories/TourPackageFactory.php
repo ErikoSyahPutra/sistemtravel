@@ -21,7 +21,7 @@ class TourPackageFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title),
             'description' => $this->faker->paragraph(2),
-            'price_minor' => $this->faker->numberBetween(500000, 5000000), // misal harga dalam rupiah
+            'price' => $this->faker->numberBetween(500000, 5000000), // misal harga dalam rupiah
             'currency' => 'IDR', // bisa diganti atau ambil dari tabel currency
             'duration_days' => $this->faker->numberBetween(1, 10),
             'capacity' => $this->faker->numberBetween(5, 30),
