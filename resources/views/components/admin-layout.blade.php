@@ -39,6 +39,10 @@
                 class="block px-3 py-2 rounded hover:bg-gray-800 {{ request()->routeIs('admin.tourpackages.*') ? 'bg-gray-800' : '' }}">
                 Tour Package Management
             </a>
+            <a href="{{ route('admin.bookings.index') }}"
+                class="block px-3 py-2 rounded hover:bg-gray-800 {{ request()->routeIs('admin.bookings.*') ? 'bg-gray-800' : '' }}">
+                Booking Management
+            </a>
         </nav>
         <div class="p-4 border-t border-gray-800">
             <form method="POST" action="{{ route('logout') }}">

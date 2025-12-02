@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TourPackage extends Model
 {
@@ -21,6 +22,10 @@ class TourPackage extends Model
         'extras'
     ];
 
+    public function itineraries(): HasMany
+    {
+        return $this->hasMany(Itinerary::class, 'package_id');
+    }
     public function destination()
     {
         return $this->belongsTo(Destination::class);

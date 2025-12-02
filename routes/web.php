@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GuideController;
-use App\Http\Controllers\GuidesController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DestinationController;
@@ -15,6 +14,12 @@ use App\Http\Controllers\TourPackageController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Guide\DashboardController;
+use App\Http\Controllers\Guide\JobController;
+use App\Http\Controllers\Guide\ReviewController;
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\GuideAssignmentController;
+
 
 // =============== LANDING PAGE ===============
 Route::get('/', function () {
@@ -53,6 +58,8 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('destinations', DestinationController::class);
         Route::resource('currencies', CurrencyController::class);
         Route::resource('tourpackages', TourPackageController::class);
+        Route::resource('bookings', AdminBookingController::class)->only(['index', 'show',]);
+        Route::resource('guide-assignments', GuideAssignmentController::class)->only(['store', 'destroy']);
     });
 
 // ====================================================================
@@ -62,7 +69,10 @@ Route::middleware(['auth', 'role:guide'])
     ->prefix('guide')
     ->name('guide.')
     ->group(function () {
-        Route::get('/dashboard', [GuidesController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::resource('my-jobs', JobController::class)->only(['index', 'show', 'update']);
+        Route::resource('reviews', ReviewController::class)->only(['index', 'show', 'destroy']);
     });
 
 // ====================================================================

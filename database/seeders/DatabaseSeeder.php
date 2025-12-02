@@ -9,6 +9,8 @@ use App\Models\Guide;
 use App\Models\Destination;
 use App\Models\TourPackage;
 use App\Models\Currency;
+use App\Models\Booking;
+use App\Models\Itinerary;
 
 class DatabaseSeeder extends Seeder
 {
@@ -50,6 +52,19 @@ class DatabaseSeeder extends Seeder
 
         // ================= TourPackages =================
         TourPackage::factory(20)->create();
+
+        // ================= Itineraries =================
+        // Setiap paket tour akan punya 3-5 itinerary
+        $tourPackages = TourPackage::all();
+        foreach ($tourPackages as $package) {
+            $itineraryCount = rand(3, 5);
+            Itinerary::factory($itineraryCount)->create(['package_id' => $package->id]);
+        }
+
+        // ================= Bookings =================
+        Booking::factory(10)->create();
+
+
 
         // ================= Guides =================
         // Setiap user dengan role guide akan otomatis punya guide record

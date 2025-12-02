@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Guide;
 
 use App\Http\Controllers\Controller;
-use App\Models\Booking;
 use App\Models\GuideAssignment;
-use App\Models\Guide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -16,73 +14,74 @@ class JobController extends Controller
     /**
      * Menampilkan daftar semua pekerjaan (assignments) yang
      * ditugaskan kepada guide yang sedang login.
-     * Ini adalah halaman "Pekerjaan Saya".
      */
     public function index(Request $request): View
     {
-        // 1. Dapatkan profil guide dari user yang sedang login
         $guide = Auth::user()->guide;
 
-        // 2. Jika tidak ada profil guide, kembalikan view with data kosong
+        // Jika user login tapi belum punya profil guide
         if (!$guide) {
             return view('guide.my-jobs.index', ['assignments' => collect()]);
         }
 
-        // 3. Ambil semua assignment untuk guide ini
-        // Asumsi admin menugaskan dengan status 'confirmed' atau 'pending_guide_confirmation'
+        // Query dasar
         $assignmentsQuery = GuideAssignment::where('guide_id', $guide->id)
+            // Filter: Hanya tampilkan assignment yang data booking-nya masih ada (valid)
+            ->has('booking')
             ->with([
-                'booking.package', // Memuat relasi package() dari model Booking
-                'booking.user'     // Memuat relasi user() (customer) dari model Booking
+                'booking.package', // Agar judul paket muncul
+                'booking.user'     // Agar nama customer muncul
             ])
-            ->latest('created_at'); // Tampilkan yang terbaru ditugaskan
+            ->latest('created_at');
 
-        // Filter berdasarkan status (misal: 'upcoming', 'completed')
+        // Filter status jika ada parameter ?status=... di URL
         if ($request->has('status') && $request->status != '') {
             $assignmentsQuery->where('status', $request->status);
         }
 
         $assignments = $assignmentsQuery->paginate(10);
 
-        // Arahkan ke view 'guide.my-jobs.index'
-        // Jika $assignments kosong, Blade @forelse akan menampilkan
-        // "belum ada pekerjaan yang diberikan"
         return view('guide.my-jobs.index', compact('assignments'));
     }
 
-    /**
-     * Menampilkan detail dari satu pekerjaan (assignment).
-     * Termasuk detail booking, customer, dan itinerary.
-     */
-    public function show(GuideAssignment $assignment): View
+    public function show($id)
     {
-        // 1. OTORISASI: Pastikan guide yang login adalah guide yang
-        // ditugaskan untuk assignment ini.
-        $guideId = Auth::user()->guide->id;
-        abort_if($assignment->guide_id !== $guideId, 403, 'Anda tidak memiliki izin untuk mengakses pekerjaan ini.');
+        $currentGuideId = Auth::user()->guide->id;
 
-        // 2. Muat semua relasi yang dibutuhkan untuk halaman detail
-        $assignment->load([
-            'booking.package.destination', // booking->package()->destination()
-            'booking.user',                // booking->user() (customer)
-            'booking.itineraries',         // booking->itineraries()
-            'assignedBy'                   // assignedBy() (admin user)
-        ]);
+        $assignment = GuideAssignment::with([
+            'booking.user',                  // Data Pelanggan
+            'booking.package.destination',   // Data Lokasi Paket
+            'booking.package.itineraries',   // Data Itinerary
+            'assignedBy'                     // Admin yang menugaskan
+        ])->find($id);
 
-        // 3. Kirim data ke view
+        // 2. CEK APAKAH ASSIGNMENT DITEMUKAN?
+        if (!$assignment) {
+            return redirect()->route('guide.my-jobs.index')->with('error', 'Data pekerjaan tidak ditemukan.');
+        }
+
+        // 3. CEK OTORISASI (Pemilik Tugas)
+        if ($assignment->guide_id !== $currentGuideId) {
+            abort(403, 'Anda tidak memiliki izin untuk mengakses pekerjaan ini.');
+        }
+
+        if (!$assignment->booking) {
+            return redirect()->route('guide.my-jobs.index')
+                ->with('error', 'Data Booking untuk pekerjaan ini tidak valid atau telah dihapus.');
+        }
+
+        // Kirim ke View
         return view('guide.my-jobs.show', compact('assignment'));
     }
 
     /**
      * Mengubah status ketersediaan guide.
-     * Ini adalah fitur PENTING untuk alur kerja ini.
      */
     public function toggleAvailability(Request $request): RedirectResponse
     {
         $guide = Auth::user()->guide;
 
         if ($guide) {
-            // Balik nilai boolean (true jadi false, false jadi true)
             $guide->available = !$guide->available;
             $guide->save();
 

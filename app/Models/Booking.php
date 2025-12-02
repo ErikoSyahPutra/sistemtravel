@@ -3,10 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Booking extends Model
@@ -49,7 +45,7 @@ class Booking extends Model
 
     public function package()
     {
-        return $this->belongsTo(TourPackage::class);
+        return $this->belongsTo(TourPackage::class, 'package_id');
     }
 
     public function itineraries()
@@ -66,13 +62,6 @@ class Booking extends Model
     {
         return $this->hasMany(Review::class);
     }
-
-    // app/Models/Booking.php
-    public function tourPackage()
-    {
-        return $this->belongsTo(TourPackage::class, 'package_id');
-    }
-
 
 
     public function isPending()

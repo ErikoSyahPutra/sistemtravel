@@ -18,28 +18,26 @@
                 @forelse($assignments as $assignment)
                 <div class="border rounded-lg p-4 flex flex-col sm:flex-row justify-between sm:items-center">
                     <div>
-                        {{-- Perbaikan 1: Menggunakan relasi 'package' --}}
+                        {{-- Data Paket diambil dari relasi Package --}}
                         <p class="text-xl font-bold text-indigo-600">{{ $assignment->booking->package->title ?? 'N/A' }}</p>
+
                         <p class="text-sm text-gray-600">
                             Pelanggan: <strong>{{ $assignment->booking->user->name ?? 'N/A' }}</strong>
                         </p>
                         <p class="text-sm text-gray-600">
-                            {{-- Perbaikan 2: Menggunakan kolom 'date_start' --}}
+                            {{-- Tanggal Mulai --}}
                             Tanggal Mulai: <strong>{{ \Carbon\Carbon::parse($assignment->booking->date_start)->format('d F Y') }}</strong>
                         </p>
                     </div>
+
                     <div class="mt-4 sm:mt-0 flex space-x-2">
-                        {{-- Perbaikan 3: Mengirimkan $assignment, bukan $assignment->booking --}}
+                        {{-- Tombol 1: Detail Pekerjaan --}}
                         <a href="{{ route('guide.my-jobs.show', $assignment) }}" class="px-3 py-2 text-xs font-medium text-center text-white bg-gray-600 rounded-lg hover:bg-gray-700">
                             Lihat Detail
-                        </a>
-                        <a href="{{ route('guide.itineraries.edit', $assignment->booking) }}" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-                            Kelola Itinerary
                         </a>
                     </div>
                 </div>
                 @empty
-                {{-- Pesan ini sesuai dengan logika controller --}}
                 <p class="text-gray-500">Anda belum memiliki pekerjaan yang ditugaskan.</p>
                 @endforelse
 

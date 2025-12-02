@@ -14,7 +14,7 @@ class Itinerary extends Model
     use HasFactory;
 
     protected $fillable = [
-        'booking_id',
+        'package_id',
         'day_number',
         'title',
         'description',
@@ -23,8 +23,8 @@ class Itinerary extends Model
         'location'
     ];
 
-    public function booking()
+    public function package()
     {
-        return $this->belongsTo(Booking::class);
+        return $this->belongsTo(TourPackage::class, 'package_id');
     }
 }
