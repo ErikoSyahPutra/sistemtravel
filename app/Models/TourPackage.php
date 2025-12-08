@@ -22,7 +22,7 @@ class TourPackage extends Model
         'extras'
     ];
 
-    public function itineraries(): HasMany
+    public function itinerary(): HasMany
     {
         return $this->hasMany(Itinerary::class, 'package_id');
     }
