@@ -21,6 +21,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/', [CustomerController::class, 'welcome'])->name('welcome');
+
+Route::get('/destinations', [CustomerController::class, 'destinations'])->name('destinations');
+Route::get('/destinations/{destination}/packages', [CustomerController::class, 'showPackages'])
+    ->name('packages.index');
+
+Route::get('/packages/{package}', [CustomerController::class, 'packageDetail'])
+    ->name('customer.package.detail');
+
+
 // =============== DASHBOARD REDIRECT (DINAMIS) ===============
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     $user = auth()->user();
@@ -84,6 +94,7 @@ Route::middleware(['auth', 'role:customer'])
         Route::get('/booking', [BookingController::class, 'index'])->name('booking');
         Route::get('/packages/{tourPackage}/book', [BookingController::class, 'create'])->name('booking.create');
         Route::post('/booking/store/{id}', [BookingController::class, 'store'])->name('booking.store');
+        Route::get('/booking/{id}', [BookingController::class, 'show'])->name('booking.show');
 
         // Pembayaran
         Route::get('/booking/{booking}/pay', [BookingController::class, 'showPayment'])->name('booking.pay');

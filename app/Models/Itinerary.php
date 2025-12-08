@@ -3,10 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Itinerary extends Model
@@ -14,17 +10,17 @@ class Itinerary extends Model
     use HasFactory;
 
     protected $fillable = [
-        'booking_id',
+        'package_id',
         'day_number',
         'title',
         'description',
         'start_time',
         'end_time',
-        'location'
+        'location',
     ];
 
-    public function booking()
+    public function package()
     {
-        return $this->belongsTo(Booking::class);
+        return $this->belongsTo(TourPackage::class, 'package_id');
     }
 }

@@ -4,14 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Destinations • KitaTravel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <title>{{ $package->name }} - Detail Paket</title>
+    @vite('resources/css/app.css')
 </head>
 
-<body class="bg-gray-50">
+<body class="bg-gray-100">
 
-    <!-- NAVBAR -->
     <header class="bg-white shadow sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <a href="/" class="text-2xl font-bold text-blue-600">KitaTravel</a>
@@ -111,92 +109,103 @@
         </div>
     </header>
 
-    <script>
-        const btn = document.getElementById("mobileMenuBtn");
-        const menu = document.getElementById("mobileMenu");
-        btn.addEventListener("click", () => menu.classList.toggle("hidden"));
-    </script>
+    <!-- HEADER GAMBAR -->
+    <div class="w-full h-64 bg-gray-200 flex items-center justify-center text-gray-500 text-lg">
+        (Gambar Paket)
+    </div>
 
     <!-- CONTENT -->
-    <div class="py-12 min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-10">
+    <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-3 gap-10">
 
-            <!-- Header & Search Bar -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-                <div>
-                    <h1 class="text-3xl font-bold text-blue-700">Explore Destinations</h1>
-                    <p class="text-gray-600 mt-2">Temukan berbagai destinasi menarik untuk perjalanan Anda.</p>
-                </div>
+        <!-- KONTEN KIRI -->
+        <div class="lg:col-span-2 space-y-6">
 
-                <form action="{{ route('customer.destinations') }}" method="GET"
-                    class="mt-4 sm:mt-0 flex items-center w-full max-w-md">
-                    <input type="text" name="search" placeholder="Cari destinasi..."
-                        value="{{ request('search') }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <button type="submit"
-                        class="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 transition">
-                        Cari
-                    </button>
-                </form>
+            <!-- JUDUL -->
+            <h1 class="text-3xl font-bold text-gray-800">{{ $package->name }}</h1>
+
+            <p class="text-gray-600 text-lg">
+                Durasi: <span class="font-semibold">{{ $package->duration_days }} hari</span>
+            </p>
+
+            <!-- DESKRIPSI -->
+            <div class="bg-white p-6 rounded-xl shadow">
+                <h2 class="text-xl font-semibold mb-3">Deskripsi Paket</h2>
+                <p class="text-gray-700 leading-relaxed">
+                    {{ $package->description ?? 'Tidak ada deskripsi tersedia.' }}
+                </p>
             </div>
 
-            <!-- Grid Destinations -->
-            @if (isset($destinations) && $destinations->isNotEmpty())
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @foreach ($destinations as $destination)
-                        <div
-                            class="bg-white border rounded-xl shadow-sm hover:shadow-lg transition overflow-hidden flex flex-col">
-                            <div class="relative h-48 bg-gray-100 overflow-hidden">
-                                @if ($destination->cover_image)
-                                    <img src="{{ asset('storage/' . $destination->cover_image) }}"
-                                        alt="{{ $destination->name }}"
-                                        class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
-                                @else
-                                    <div class="w-full h-full flex items-center justify-center text-gray-400">No Image
-                                    </div>
-                                @endif
-                            </div>
-
-                            <div class="p-4 flex-1 flex flex-col justify-between">
-                                <div>
-                                    <h3 class="text-lg font-semibold text-gray-800">{{ $destination->name }}</h3>
-                                    <p class="text-sm text-gray-500 mt-1">{{ $destination->location }}</p>
-                                    <p class="text-gray-700 text-sm mt-3 line-clamp-3">
-                                        {{ $destination->description ? Str::limit($destination->description, 120) : 'Tidak ada deskripsi tersedia.' }}
-                                    </p>
-
-                                    <!-- Info Paket -->
-                                    @if ($destination->tourPackages && $destination->tourPackages->isNotEmpty())
-                                        @php $paket = $destination->tourPackages->first(); @endphp
-                                        <div class="mt-3 text-sm text-gray-600 space-y-1">
-                                            <div><span class="font-semibold">Durasi:</span>
-                                                {{ $paket->duration_days ?? '-' }} hari</div>
-                                            <div><span class="font-semibold">Harga mulai dari:</span>
-                                                Rp{{ number_format($paket->price ?? 0, 0, ',', '.') }}</div>
-                                            @if ($paket->rating)
-                                                <div><span class="font-semibold">Rating:</span> {{ $paket->rating }} ⭐
-                                                </div>
-                                            @endif
-                                        </div>
-                                    @endif
-                                </div>
-
-                                <!-- Lihat Paket Button -->
-                                <div class="mt-4">
-                                    <a href="{{ route('packages.index', $destination) }}"
-                                        class="block w-full text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition font-semibold">
-                                        Lihat Paket →
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+            <!-- RATING -->
+            @if ($package->rating)
+                <div class="bg-white p-6 rounded-xl shadow">
+                    <h2 class="text-xl font-semibold mb-3">Rating</h2>
+                    <p class="text-yellow-500 font-bold text-xl">{{ $package->rating }} ⭐</p>
                 </div>
-            @else
-                <p class="text-gray-600 text-center py-10">Tidak ada destinasi yang ditemukan.</p>
             @endif
 
+            <!-- ITINERARY -->
+            <div class="bg-white p-6 rounded-xl shadow">
+                <h2 class="text-xl font-semibold mb-4">Itinerary Perjalanan</h2>
+
+                @if ($package->itineraries->count() > 0)
+                    <div class="space-y-4">
+
+                        @foreach ($package->itineraries->sortBy('day_number') as $item)
+                            <div class="border-l-4 border-blue-600 pl-4 py-2 bg-blue-50 rounded">
+                                <p class="text-blue-700 font-semibold text-lg">
+                                    Hari {{ $item->day_number }} — {{ $item->title }}
+                                </p>
+
+                                @if ($item->description)
+                                    <p class="text-gray-700 mt-1">{{ $item->description }}</p>
+                                @endif
+
+                                <div class="text-sm text-gray-600 mt-2">
+                                    @if ($item->start_time)
+                                        <p>Mulai: {{ \Carbon\Carbon::parse($item->start_time)->format('H:i') }}</p>
+                                    @endif
+
+                                    @if ($item->end_time)
+                                        <p>Selesai: {{ \Carbon\Carbon::parse($item->end_time)->format('H:i') }}</p>
+                                    @endif
+
+                                    @if ($item->location)
+                                        <p>Lokasi: {{ $item->location }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+
+                    </div>
+                @else
+                    <p class="text-gray-500">Belum ada itinerary untuk paket ini.</p>
+                @endif
+            </div>
+
+
         </div>
+
+        <!-- KONTEN KANAN (CARD BOOKING) -->
+        <div>
+            <div class="bg-white p-6 rounded-xl shadow sticky top-24">
+
+                <h3 class="text-2xl font-bold text-blue-600">
+                    Rp{{ number_format($package->price, 0, ',', '.') }}
+                    <span class="text-gray-600 text-sm font-normal"> / orang</span>
+                </h3>
+
+                <p class="text-gray-500 mt-2">
+                    Durasi: {{ $package->duration_days }} hari
+                </p>
+
+                <a href="{{ route('customer.booking.create', $package) }}"
+                    class="block w-full mt-5 bg-green-600 text-white text-center py-3 rounded-lg hover:bg-green-700 font-semibold">
+                    Pesan Sekarang
+                </a>
+
+            </div>
+        </div>
+
     </div>
 
 </body>

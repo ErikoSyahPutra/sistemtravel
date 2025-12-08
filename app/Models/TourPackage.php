@@ -45,4 +45,9 @@ class TourPackage extends Model
     {
         return $this->hasMany(Booking::class, 'package_id');
     }
+
+    public function itineraries()
+    {
+        return $this->hasMany(Itinerary::class, 'package_id');
+    }
 }

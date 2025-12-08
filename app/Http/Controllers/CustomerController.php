@@ -13,6 +13,18 @@ use App\Models\Destination;
 
 class CustomerController extends Controller
 {
+    // Welcome page untuk user yang belum login
+    public function welcome()
+    {
+        // Ambil 8 destinasi populer
+        $destinations = Destination::orderBy('created_at', 'desc')->take(8)->get();
+
+        // Ambil booking jika user sudah login
+        $bookings = Auth::check() ? Auth::user()->bookings : collect();
+
+        return view('welcome', compact('destinations', 'bookings'));
+    }
+
     // Dashboard customer
     public function index()
     {
@@ -35,7 +47,7 @@ class CustomerController extends Controller
         // Ambil semua destinasi tanpa pagination
         $destinations = $query->orderBy('created_at', 'desc')->get();
 
-        return view('customer.destinations', compact('destinations'));
+        return view('customer.destinations',  compact('destinations'));
     }
 
     // Method baru untuk menampilkan paket tur berdasarkan destinasi
@@ -54,5 +66,10 @@ class CustomerController extends Controller
         }
 
         return view('customer.confirm', compact('package'));
+    }
+
+    public function packageDetail(TourPackage $package)
+    {
+        return view('customer.package-detail', compact('package'));
     }
 }
