@@ -3,10 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Itinerary extends Model
@@ -20,7 +16,7 @@ class Itinerary extends Model
         'description',
         'start_time',
         'end_time',
-        'location'
+        'location',
     ];
 
     public function package()

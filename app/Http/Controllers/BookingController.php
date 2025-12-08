@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
+
+    public function show($id)
+    {
+        $booking = Booking::with('tourPackage')
+            ->where('user_id', Auth::id())   // cuma boleh lihat booking milik sendiri
+            ->findOrFail($id);
+
+        return view('customer.booking-detail', compact('booking'));
+    }
+
+
     // Menampilkan daftar booking user yang login
     public function index()
     {
@@ -40,7 +51,7 @@ class BookingController extends Controller
     public function store(Request $request, $id)
     {
         $request->validate([
-            'tour_package_id' => 'required|exists:tour_packages,id',
+            'package_id' => 'required|exists:tour_packages,id',
             'date_start' => 'required|date|after_or_equal:today',
             'pax' => 'required|integer|min:1',
             'contact_name' => 'required|string|max:255',

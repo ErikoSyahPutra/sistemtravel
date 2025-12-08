@@ -61,11 +61,6 @@ class DatabaseSeeder extends Seeder
             Itinerary::factory($itineraryCount)->create(['package_id' => $package->id]);
         }
 
-        // ================= Bookings =================
-        Booking::factory(10)->create();
-
-
-
         // ================= Guides =================
         // Setiap user dengan role guide akan otomatis punya guide record
         $guideUsers = User::where('role', 'guide')->get();
