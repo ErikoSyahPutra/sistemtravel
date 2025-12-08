@@ -27,12 +27,6 @@
                 class="block px-3 py-2 rounded hover:bg-gray-800 {{ request()->routeIs('guide.my-jobs.*') ? 'bg-gray-800' : '' }}">
                 Pekerjaan Saya
             </a>
-
-            {{-- Ulasan Saya --}}
-            <a href="{{ route('guide.reviews.index') }}"
-                class="block px-3 py-2 rounded hover:bg-gray-800 {{ request()->routeIs('guide.reviews.*') ? 'bg-gray-800' : '' }}">
-                Ulasan Saya
-            </a>
         </nav>
         <div class="p-4 border-t border-gray-800">
             <form method="POST" action="{{ route('logout') }}">
