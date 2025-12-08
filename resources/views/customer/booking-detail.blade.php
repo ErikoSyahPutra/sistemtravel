@@ -44,6 +44,14 @@
                 Kembali
             </a>
 
+            <!-- Tombol Bayar Sekarang (jika pending) -->
+            @if ($booking->payment_status === 'pending')
+                <a href="{{ route('customer.booking.pay', $booking->id) }}"
+                    class="inline-block mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Bayar Sekarang
+                </a>
+            @endif
+
         </div>
 
 
@@ -87,10 +95,8 @@
                             </div>
                         @endforeach
                     </div>
-
                 </div>
             @endforeach
-
         @endif
 
     </div>

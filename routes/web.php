@@ -95,10 +95,12 @@ Route::middleware(['auth', 'role:customer'])
         Route::get('/packages/{tourPackage}/book', [BookingController::class, 'create'])->name('booking.create');
         Route::post('/booking/store/{id}', [BookingController::class, 'store'])->name('booking.store');
         Route::get('/booking/{id}', [BookingController::class, 'show'])->name('booking.show');
+        Route::get('/booking/pay/{id}', [BookingController::class, 'payNow'])
+            ->name('booking.pay');
 
         // Pembayaran
-        Route::get('/booking/{booking}/pay', [BookingController::class, 'showPayment'])->name('booking.pay');
-        Route::post('/booking/{booking}/pay', [BookingController::class, 'processPayment'])->name('booking.process');
+        // Route::get('/booking/{booking}/pay', [BookingController::class, 'showPayment'])->name('booking.pay');
+        // Route::post('/booking/{booking}/pay', [BookingController::class, 'processPayment'])->name('booking.process');
 
         // Pembelian langsung paket
         Route::post('/tourpackages/{id}/buy', [CustomerController::class, 'buy'])->name('tourpackages.buy');
