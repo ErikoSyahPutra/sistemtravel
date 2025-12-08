@@ -144,43 +144,95 @@
             @endif
 
             <!-- ITINERARY -->
-            <div class="bg-white p-6 rounded-xl shadow">
-                <h2 class="text-xl font-semibold mb-4">Itinerary Perjalanan</h2>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Itinerary Perjalanan</h2>
 
-                @if ($package->itineraries->count() > 0)
-                    <div class="space-y-4">
+                @php
+                    $grouped = $package->itineraries->sortBy('day_number')->groupBy('day_number');
+                @endphp
 
-                        @foreach ($package->itineraries->sortBy('day_number') as $item)
-                            <div class="border-l-4 border-blue-600 pl-4 py-2 bg-blue-50 rounded">
-                                <p class="text-blue-700 font-semibold text-lg">
-                                    Hari {{ $item->day_number }} — {{ $item->title }}
-                                </p>
-
-                                @if ($item->description)
-                                    <p class="text-gray-700 mt-1">{{ $item->description }}</p>
-                                @endif
-
-                                <div class="text-sm text-gray-600 mt-2">
-                                    @if ($item->start_time)
-                                        <p>Mulai: {{ \Carbon\Carbon::parse($item->start_time)->format('H:i') }}</p>
-                                    @endif
-
-                                    @if ($item->end_time)
-                                        <p>Selesai: {{ \Carbon\Carbon::parse($item->end_time)->format('H:i') }}</p>
-                                    @endif
-
-                                    @if ($item->location)
-                                        <p>Lokasi: {{ $item->location }}</p>
-                                    @endif
-                                </div>
-                            </div>
-                        @endforeach
-
+                @if ($grouped->isEmpty())
+                    <div class="bg-white p-6 rounded-lg shadow text-center text-gray-500">
+                        Belum ada itinerary untuk paket ini.
                     </div>
                 @else
-                    <p class="text-gray-500">Belum ada itinerary untuk paket ini.</p>
+                    @foreach ($grouped as $day => $items)
+                        <div class="mb-12 relative">
+
+                            <!-- Sticky Day Header -->
+                            <div class="sticky top-0 z-10 py-2 backdrop-blur border-b border-gray-200 mb-8">
+                                <span
+                                    class="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-blue-600 text-white text-sm font-semibold shadow-md">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    Hari {{ $day }}
+                                </span>
+                            </div>
+
+                            <!-- Vertical Timeline Line -->
+                            <div class="relative border-l-2 border-blue-100 ml-5 pl-8 space-y-10">
+
+                                @foreach ($items->sortBy('start_time') as $item)
+                                    <div class="relative group">
+
+                                        <!-- Dot Marker -->
+                                        <div
+                                            class="absolute -left-11 top-1.5 h-4 w-4 rounded-full border-4 border-white bg-blue-300 group-hover:bg-blue-600 transition-shadow shadow-sm">
+                                        </div>
+
+                                        <div class="flex flex-col sm:flex-row gap-4">
+
+                                            <!-- Waktu -->
+                                            <div class="flex-shrink-0">
+                                                <span
+                                                    class="inline-block px-3 py-1 bg-gray-100 rounded-md text-sm font-mono font-bold text-gray-700 border border-gray-200">
+                                                    {{ $item->start_time ? \Carbon\Carbon::parse($item->start_time)->format('H:i') : '?' }}
+                                                </span>
+                                            </div>
+
+                                            <!-- Card -->
+                                            <div
+                                                class="flex-1 bg-white border border-gray-100 p-5 rounded-xl shadow-sm hover:shadow-md transition-all">
+
+                                                <h4 class="font-bold text-gray-800 mb-1">
+                                                    {{ $item->title }}
+                                                </h4>
+
+                                                @if ($item->location)
+                                                    <p class="text-xs text-gray-500 flex items-center gap-1 mb-2">
+                                                        <svg class="w-3 h-3 text-red-500" fill="none"
+                                                            stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                        </svg>
+                                                        {{ $item->location }}
+                                                    </p>
+                                                @endif
+
+                                                <p class="text-gray-600 leading-relaxed">
+                                                    {{ $item->description }}
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                            </div>
+
+                        </div>
+                    @endforeach
+
                 @endif
             </div>
+
+
 
 
         </div>

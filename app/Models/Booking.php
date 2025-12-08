@@ -43,7 +43,7 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function package()
+    public function tourPackage()
     {
         return $this->belongsTo(TourPackage::class, 'package_id');
     }
@@ -78,5 +78,10 @@ class Booking extends Model
     {
         return $this->payment_status === 'expired' ||
             ($this->expired_at && now()->isAfter($this->expired_at));
+    }
+
+    public function package()
+    {
+        return $this->belongsTo(TourPackage::class, 'package_id');
     }
 }
