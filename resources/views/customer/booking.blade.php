@@ -67,10 +67,12 @@
                                 <!-- Tombol Bayar -->
                                 @if ($booking->payment_status === 'pending')
                                     <div class="mt-4">
-                                        <a href="{{ route('customer.booking.pay', $booking->id) }}"
-                                            class="block text-center text-sm bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-semibold">
+                                        <button
+                                            onclick="window.location='{{ route('customer.booking.pay', $booking->id) }}'"
+                                            class="block w-full text-center text-sm bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-semibold">
                                             Bayar Sekarang
-                                        </a>
+                                        </button>
+
                                     </div>
                                 @endif
 

@@ -38,7 +38,7 @@
                         pembayaran.
                     </p>
 
-                    <form action="{{ route('customer.booking.process', $booking->id) }}" method="POST">
+                    <form action="{{ route('customer.booking.create', $booking->id) }}" method="POST">
                         @csrf
                         <button type="submit"
                             class="w-full text-center bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition font-semibold text-lg">

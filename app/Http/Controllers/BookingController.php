@@ -197,19 +197,6 @@ class BookingController extends Controller
     }
 
     /**
-     * Menampilkan halaman pembayaran untuk booking.
-     */
-    public function showPayment(Booking $booking)
-    {
-        // Pastikan user hanya bisa melihat booking miliknya
-        if ($booking->user_id !== Auth::id()) {
-            abort(403);
-        }
-
-        return view('customer.payment', compact('booking'));
-    }
-
-    /**
      * Proses (simulasi) pembayaran untuk booking.
      */
     public function processPayment(Request $request, Booking $booking)
@@ -225,5 +212,18 @@ class BookingController extends Controller
         ]);
 
         return redirect()->route('customer.booking')->with('success', 'Pembayaran berhasil. Booking terkonfirmasi.');
+    }
+
+    public function payNow($id)
+    {
+        $booking = Booking::where('user_id', Auth::id())->findOrFail($id);
+
+        // Jika belum ada payment_url, berarti belum pernah buat VA -> buat ulang
+        if (!$booking->payment_url) {
+            return redirect()->route('customer.booking.show', $booking->id)
+                ->with('error', 'Link pembayaran belum tersedia. Silakan hubungi admin.');
+        }
+
+        return redirect()->away($booking->payment_url);
     }
 }
