@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GuideController;
-use App\Http\Controllers\GuidesController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DestinationController;
@@ -15,11 +14,27 @@ use App\Http\Controllers\TourPackageController;
 use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Guide\DashboardController;
+use App\Http\Controllers\Guide\JobController;
+use App\Http\Controllers\Guide\ReviewController;
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\GuideAssignmentController;
+
 
 // =============== LANDING PAGE ===============
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/', [CustomerController::class, 'welcome'])->name('welcome');
+
+Route::get('/destinations', [CustomerController::class, 'destinations'])->name('destinations');
+Route::get('/destinations/{destination}/packages', [CustomerController::class, 'showPackages'])
+    ->name('packages.index');
+
+Route::get('/packages/{package}', [CustomerController::class, 'packageDetail'])
+    ->name('customer.package.detail');
+
 
 // =============== DASHBOARD REDIRECT (DINAMIS) ===============
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
@@ -53,6 +68,8 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('destinations', DestinationController::class);
         Route::resource('currencies', CurrencyController::class);
         Route::resource('tourpackages', TourPackageController::class);
+        Route::resource('bookings', AdminBookingController::class)->only(['index', 'show',]);
+        Route::resource('guide-assignments', GuideAssignmentController::class)->only(['store', 'destroy']);
     });
 
 // ====================================================================
@@ -62,7 +79,10 @@ Route::middleware(['auth', 'role:guide'])
     ->prefix('guide')
     ->name('guide.')
     ->group(function () {
-        Route::get('/dashboard', [GuidesController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::resource('my-jobs', JobController::class)->only(['index', 'show', 'update']);
+        Route::resource('reviews', ReviewController::class)->only(['index', 'show', 'destroy']);
     });
 
 // ====================================================================
@@ -84,10 +104,13 @@ Route::middleware(['auth', 'role:customer'])
         Route::get('/booking', [BookingController::class, 'index'])->name('booking');
         Route::get('/packages/{tourPackage}/book', [BookingController::class, 'create'])->name('booking.create');
         Route::post('/booking/store/{id}', [BookingController::class, 'store'])->name('booking.store');
+        Route::get('/booking/{id}', [BookingController::class, 'show'])->name('booking.show');
+        Route::get('/booking/pay/{id}', [BookingController::class, 'payNow'])
+            ->name('booking.pay');
 
         // Pembayaran
-        Route::get('/booking/{booking}/pay', [BookingController::class, 'showPayment'])->name('booking.pay');
-        Route::post('/booking/{booking}/pay', [BookingController::class, 'processPayment'])->name('booking.process');
+        // Route::get('/booking/{booking}/pay', [BookingController::class, 'showPayment'])->name('booking.pay');
+        // Route::post('/booking/{booking}/pay', [BookingController::class, 'processPayment'])->name('booking.process');
 
         // Pembelian langsung paket
         Route::post('/tourpackages/{id}/buy', [CustomerController::class, 'buy'])->name('tourpackages.buy');

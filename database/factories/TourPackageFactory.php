@@ -4,8 +4,11 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Str;
 use App\Models\Destination;
+use App\Models\TourPackage;
+use App\Models\Itinerary;
 
 class TourPackageFactory extends Factory
 {
@@ -35,5 +38,19 @@ class TourPackageFactory extends Factory
                 'pickup' => $this->faker->boolean(),
             ]),
         ];
+    }
+    public function configure()
+    {
+        return $this->afterCreating(function (TourPackage $package) {
+            // Otomatis buat 3 Itinerary berurutan setiap kali Paket dibuat
+            Itinerary::factory()
+                ->count(3)
+                ->state(new Sequence(
+                    ['day_number' => 1, 'title' => 'Penjemputan & City Tour'],
+                    ['day_number' => 2, 'title' => 'Wisata Utama'],
+                    ['day_number' => 3, 'title' => 'Drop Bandara']
+                ))
+                ->create(['package_id' => $package->id]);
+        });
     }
 }

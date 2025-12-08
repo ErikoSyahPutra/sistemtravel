@@ -20,7 +20,7 @@
                 <form action="{{ route('customer.booking.store', $package->id) }}" method="POST" class="space-y-4"
                     id="booking-form">
                     @csrf
-                    <input type="hidden" name="tour_package_id" value="{{ $package->id }}">
+                    <input type="hidden" name="package_id" value="{{ $package->id }}">
 
                     <div>
                         <label for="date_start" class="block text-sm font-medium text-gray-700 mb-1">Tanggal
