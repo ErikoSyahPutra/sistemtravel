@@ -7,42 +7,29 @@ use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Database\Eloquent\Builder;
 
 class ReviewController extends Controller
 {
-    /**
-     * Menampilkan daftar ulasan untuk guide yang sedang login.
-     */
     public function index(): View
     {
-        // 1. Dapatkan profil guide dari user yang sedang login
         $guide = Auth::user()->guide;
 
-        // 2. Jika guide tidak memiliki profil, kembalikan data kosong
         if (!$guide) {
-            $reviews = collect();
-            return view('guide.reviews.index', compact('reviews'));
+            return view('guide.reviews.index', ['reviews' => collect()]);
         }
 
         $guideId = $guide->id;
 
-        // 3. Ambil semua ulasan yang terhubung ke booking
-        //    di mana guide ini ditugaskan (dan statusnya approved/confirmed)
-        $reviews = Review::whereHas('booking.guideAssignments', function ($query) use ($guideId) {
-            // --- PERBAIKAN DI SINI ---
-            // Nama relasi di Model Booking adalah 'guideAssignments', bukan 'assignments'
-
-            $query->where('guide_id', $guideId)
-                ->where('status', 'confirmed'); // Sesuaikan status jika perlu, misal 'completed'
-        })
-            ->with([
-                'user',     // Customer yang menulis ulasan
-                'package'   // Muat relasi 'package' secara langsung
-            ])
-            ->latest() // Menggunakan 'created_at' (default)
+        $reviews = Review::with(['booking.package', 'user'])
+            ->whereHas('booking', function (Builder $query) use ($guideId) {
+                $query->whereHas('guideAssignments', function (Builder $subQuery) use ($guideId) {
+                    $subQuery->where('guide_id', $guideId);
+                });
+            })
+            ->latest()
             ->paginate(10);
 
-        // 4. Kirim data ulasan ke view
         return view('guide.reviews.index', compact('reviews'));
     }
 }
