@@ -46,12 +46,10 @@
                             </x-slot>
 
                             <x-slot name="content">
-
                                 <x-dropdown-link :href="route('profile.edit')">
                                     {{ __('Profile') }}
                                 </x-dropdown-link>
 
-                                <!-- Logout -->
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <x-dropdown-link :href="route('logout')"
@@ -59,7 +57,6 @@
                                         {{ __('Log Out') }}
                                     </x-dropdown-link>
                                 </form>
-
                             </x-slot>
                         </x-dropdown>
                     </div>
@@ -71,7 +68,6 @@
                 @endauth
             </div>
 
-            <!-- Mobile Menu Button -->
             <button id="mobileMenuBtn" class="md:hidden focus:outline-none">
                 <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" stroke-width="2"
                     viewBox="0 0 24 24">
@@ -80,7 +76,6 @@
             </button>
         </div>
 
-        <!-- Mobile Menu -->
         <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
             <nav class="flex flex-col space-y-4 p-4">
                 <a href="/" class="hover:text-blue-600">Beranda</a>
@@ -105,19 +100,9 @@
                         Login
                     </a>
                 @endauth
-
             </nav>
         </div>
     </header>
-
-    <script>
-        const menuBtn = document.getElementById("menuBtn");
-        const mobileMenu = document.getElementById("mobileMenu");
-
-        menuBtn.addEventListener("click", () => {
-            mobileMenu.classList.toggle("hidden");
-        });
-    </script>
 
     <!-- CONTENT SECTION -->
     <div class="py-12 max-w-7xl mx-auto px-6">
@@ -133,13 +118,26 @@
                         <div
                             class="bg-white border rounded-xl shadow-sm hover:shadow-lg transition overflow-hidden flex flex-col">
 
-                            <div class="relative h-48 bg-gray-100 flex items-center justify-center text-gray-400">
-                                (Gambar Paket)
+                            @php
+                                $images = json_decode($package->images, true);
+                            @endphp
+
+                            <div class="relative h-48 bg-gray-100 overflow-hidden">
+                                @if ($images && isset($images[0]))
+                                    <img
+                                        src="{{ asset('storage/' . $images[0]) }}"
+                                        alt="{{ $package->title }}"
+                                        class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                        No Image
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="p-4 flex-1 flex flex-col justify-between">
                                 <div>
-                                    <h3 class="text-lg font-semibold text-gray-800">{{ $package->name }}</h3>
+                                    <h3 class="text-lg font-semibold text-gray-800">{{ $package->title }}</h3>
                                     <p class="text-sm text-gray-500 mt-1">{{ $package->duration_days }} hari</p>
 
                                     <p class="text-gray-700 text-sm mt-3 line-clamp-3">

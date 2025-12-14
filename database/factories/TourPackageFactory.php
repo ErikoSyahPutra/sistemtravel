@@ -29,8 +29,16 @@ class TourPackageFactory extends Factory
             'duration_days' => $this->faker->numberBetween(1, 10),
             'capacity' => $this->faker->numberBetween(5, 30),
             'images' => json_encode([
-                $this->faker->imageUrl(640, 480, 'travel', true),
-                $this->faker->imageUrl(640, 480, 'travel', true),
+                $this->faker->randomElement([
+                    'packages/package1.jpg',
+                    'packages/package2.jpg',
+                    'packages/package3.jpg',
+                ]),
+                $this->faker->randomElement([
+                    'packages/package1.jpg',
+                    'packages/package2.jpg',
+                    'packages/package3.jpg',
+                ]),
             ]),
             'extras' => json_encode([
                 'meals' => $this->faker->boolean(),

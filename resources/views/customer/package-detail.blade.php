@@ -110,9 +110,22 @@
     </header>
 
     <!-- HEADER GAMBAR -->
-    <div class="w-full h-64 bg-gray-200 flex items-center justify-center text-gray-500 text-lg">
-        (Gambar Paket)
-    </div>
+    @php
+            $images = json_decode($package->images, true);
+        @endphp
+
+        <div class="w-full h-64 bg-gray-200 overflow-hidden">
+            @if ($images && isset($images[0]))
+                <img
+                    src="{{ asset('storage/' . $images[0]) }}"
+                    alt="{{ $package->name }}"
+                    class="w-full h-full object-cover">
+            @else
+                <div class="w-full h-full flex items-center justify-center text-gray-500 text-lg">
+                    No Image
+                </div>
+            @endif
+        </div>
 
     <!-- CONTENT -->
     <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-3 gap-10">
